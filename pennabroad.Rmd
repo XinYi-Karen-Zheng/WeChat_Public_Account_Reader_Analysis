@@ -8,11 +8,12 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
 ```{r}
-articles <- read.csv("C:/Users/Karen Zheng/Documents/2018-2019/S2/OIDD245/Data Project 2/studyabroad.csv")
-
+##load input document
+articles <- read.csv("C:/Users/filepath")
 ```
 
 ```{r}
+##making a corpus, perform text cleaning, and finally making a document-term-matrix
 library(tm)
 library(wordcloud)
 
@@ -32,6 +33,7 @@ m = as.matrix(dtms)
 ```
 
 ```{r}
+##topics training
 library(topicmodels)
 terms = rowSums(m) != 0
 m = m[terms,]
@@ -40,7 +42,6 @@ ldaOut <- LDA(m, 5, method="Gibbs")
 terms(ldaOut, 10)
 
 ```
-
 
 
 
