@@ -9,7 +9,7 @@ Try executing this chunk by clicking the *Run* button within the chunk or by pla
 
 ```{r}
 ##loading input data
-myArticles <- read.csv("C:/Users/Karen Zheng/Documents/2018-2019/S2/OIDD245/Data Project 2/data_compilation.csv")
+myArticles <- read.csv("C:/Users/filepath")
 
 ```
 
