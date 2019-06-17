@@ -8,6 +8,8 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
 ```{r}
+##install packages for Chinese text mining
+
 install.packages("readxl")
 install.packages('chinese.misc')
 
@@ -21,9 +23,10 @@ library(jiebaR)
 library(readxl)
 library(wordcloud)
 
-my_data <- read_excel("C:/Users/Karen Zheng/Documents/2018-2019/S2/OIDD245/Data Project 2/Edu.xlsx")
+##loading input data
+my_data <- read_excel("C:/Users/filepath")
 
-
+##prepare to perform text cleaning
 cutter=worker()
 content=my_data$abstract
 segWords<-segment(content,cutter)
@@ -32,6 +35,7 @@ segWords<-segment(content,cutter)
 
 
 ```{r}
+##prepare "stopwords"
 f <- readLines('C:/Users/Karen Zheng/Documents/2018-2019/S2/OIDD245/Data Project 2/stopwords.txt')
 
 stopwords<-c(NULL)
@@ -39,6 +43,7 @@ for(i in 1:length(f))
   {
   stopwords[i]<-f[i]
 }
+##add input-data-related stopwords
 stopwords <- c(stopwords, "的")
 stopwords <- c(stopwords, "你")
 stopwords <- c(stopwords, "孜循")
@@ -50,6 +55,7 @@ segWords<-str_trim(segWords)
 
 
 ```{r}
+##text cleaning
 ##seg <- qseg[my_data$abstract] 
 
 seg <- qseg[segWords]
@@ -62,14 +68,13 @@ length(seg)
 seg <- sort(seg, decreasing = TRUE)[1:100] 
 
 ```
+
 ```{r}
-
-
+##making a word cloud with size based on frequency
 ##install.packages("wordcloud2")
 library(wordcloud2)  
 
 wordcloud2(seg, size = 1,shape = 'star')  
-
 
 ```
 
