@@ -8,6 +8,7 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
 ```{r}
+##loading input data
 myArticles <- read.csv("C:/Users/Karen Zheng/Documents/2018-2019/S2/OIDD245/Data Project 2/data_compilation.csv")
 
 ```
@@ -15,6 +16,8 @@ myArticles <- read.csv("C:/Users/Karen Zheng/Documents/2018-2019/S2/OIDD245/Data
 
 ```{r}
 ##compute relative data
+##7100 is the number of followers I had when I did this analysis. Should change to the number of current followers
+
 myArticles$First_Seven_Days <- myArticles$num_read_first_sev / myArticles$num_followers * 7100
 myArticles$Read_in_Chat <- myArticles$num_in_chat / myArticles$num_followers * 7100
 myArticles$Read_in_Moment <- myArticles$num_in_moment / myArticles$num_followers * 7100
@@ -25,12 +28,14 @@ myArticles$Favorited <- myArticles$num_fav / myArticles$num_followers * 7100
 
 
 ```{r}
-##group by
+##group by article category
 grouped <- aggregate(myArticles[, 9:13], list(myArticles$category), mean)
 
 ```
 
 ```{r}
+##for different categories, compute the number of reads in different criteria, and prepare a data frame to be graphed
+
 library(dplyr)
 ##install.packages("varhandle")
 library(varhandle)
@@ -69,6 +74,8 @@ Graph_Data <- rbind(school_data, competition_data, summerexp_data, summerintro_d
 
 
 ```{r}
+##Making the graph
+
 library(ggplot2)
 ##install.packages("ggthemes")
 library(ggthemes)
@@ -100,7 +107,7 @@ Graph
 
 
 ```{r}
-##linear model, most likely
+##linear model, compute which content category leads to more reads
 result <- lm(First_Seven_Days ~ category + Read_in_Moment + Read_in_Chat + Shared + Favorited, data = myArticles)
 
 summary(result)
