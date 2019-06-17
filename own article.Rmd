@@ -1,0 +1,115 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+myArticles <- read.csv("C:/Users/Karen Zheng/Documents/2018-2019/S2/OIDD245/Data Project 2/data_compilation.csv")
+
+```
+
+
+```{r}
+##compute relative data
+myArticles$First_Seven_Days <- myArticles$num_read_first_sev / myArticles$num_followers * 7100
+myArticles$Read_in_Chat <- myArticles$num_in_chat / myArticles$num_followers * 7100
+myArticles$Read_in_Moment <- myArticles$num_in_moment / myArticles$num_followers * 7100
+myArticles$Shared <- myArticles$num_shared / myArticles$num_followers * 7100
+myArticles$Favorited <- myArticles$num_fav / myArticles$num_followers * 7100
+
+```
+
+
+```{r}
+##group by
+grouped <- aggregate(myArticles[, 9:13], list(myArticles$category), mean)
+
+```
+
+```{r}
+library(dplyr)
+##install.packages("varhandle")
+library(varhandle)
+
+school_data <- grouped %>% filter(grouped$Group.1 == "school")
+school_data <- stack(school_data)
+school_data <- data.frame(Group.1 = rep("School", nrow(school_data)), school_data[,])
+colnames(school_data) <- c("Category", "Amount_of_reads", "criteria")
+
+
+competition_data <- grouped %>% filter(grouped$Group.1 == "competition")
+competition_data <- stack(competition_data)
+competition_data <- data.frame(Group.1 = rep("Competition", nrow(competition_data)), competition_data[,])
+colnames(competition_data) <- c("Category", "Amount_of_reads", "criteria")
+
+
+testing_data <- grouped %>% filter(grouped$Group.1 == "standardized_testing")
+testing_data <- stack(testing_data)
+testing_data <- data.frame(Group.1 = rep("Testing", nrow(testing_data)), testing_data[,])
+colnames(testing_data) <- c("Category", "Amount_of_reads", "criteria")
+
+
+summerexp_data <- grouped %>% filter(grouped$Group.1 == "summer_exp")
+summerexp_data <- stack(summerexp_data)
+summerexp_data <- data.frame(Group.1 = rep("Summer Experience", nrow(summerexp_data)), summerexp_data[,])
+colnames(summerexp_data) <- c("Category", "Amount_of_reads", "criteria")
+
+summerintro_data <- grouped %>% filter(grouped$Group.1 == "summer_intro")
+summerintro_data <- stack(summerintro_data)
+summerintro_data <- data.frame(Group.1 = rep("Summer Introduction", nrow(summerintro_data)), summerintro_data[,])
+colnames(summerintro_data) <- c("Category", "Amount_of_reads", "criteria")
+
+Graph_Data <- rbind(school_data, competition_data, summerexp_data, summerintro_data, testing_data)
+
+```
+
+
+```{r}
+library(ggplot2)
+##install.packages("ggthemes")
+library(ggthemes)
+##install.packages("extrafont")
+library(extrafont)
+
+
+Graph <- Graph_Data %>%
+  ggplot(aes(x = criteria, y = Amount_of_reads, fill = factor(Category))) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.75) +
+  scale_fill_manual(values = c("#FFBF61", "#E820CD", "#D730FF",
+                               "#8A20E8", "#000000")) +
+  theme_pander() +
+  theme(legend.title = element_blank(),
+        axis.text.x = element_text(size=7, hjust=0.5, vjust = 2),
+        axis.text.y = element_text(size=7, hjust=10, vjust = 0),
+        axis.title = element_text(size=12),
+        axis.ticks.x = element_blank(),
+        plot.title = element_text(size=14, hjust = 0.5)) +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_x_discrete(expand = c(0.1,0.1)) +
+  ggtitle("Amount Based On Article Category") +
+  labs(x = "Criteria", y = "Amount")
+
+Graph
+
+
+```
+
+
+```{r}
+##linear model, most likely
+result <- lm(First_Seven_Days ~ category + Read_in_Moment + Read_in_Chat + Shared + Favorited, data = myArticles)
+
+summary(result)
+
+```
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.

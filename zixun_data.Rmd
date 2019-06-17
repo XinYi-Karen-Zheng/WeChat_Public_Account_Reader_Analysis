@@ -1,0 +1,83 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+install.packages("readxl")
+install.packages('chinese.misc')
+
+```
+
+
+```{r}
+library(chinese.misc)
+library(tm)
+library(jiebaR)
+library(readxl)
+library(wordcloud)
+
+my_data <- read_excel("C:/Users/Karen Zheng/Documents/2018-2019/S2/OIDD245/Data Project 2/Edu.xlsx")
+
+
+cutter=worker()
+content=my_data$abstract
+segWords<-segment(content,cutter)
+
+```
+
+
+```{r}
+f <- readLines('C:/Users/Karen Zheng/Documents/2018-2019/S2/OIDD245/Data Project 2/stopwords.txt')
+
+stopwords<-c(NULL)
+for(i in 1:length(f))
+  {
+  stopwords[i]<-f[i]
+}
+stopwords <- c(stopwords, "的")
+stopwords <- c(stopwords, "你")
+stopwords <- c(stopwords, "孜循")
+segWords<-filter_segment(segWords,stopwords)
+segWords<-gsub("[0-9a-zA-Z]+?","",segWords)
+library(stringr)
+segWords<-str_trim(segWords)
+```
+
+
+```{r}
+##seg <- qseg[my_data$abstract] 
+
+seg <- qseg[segWords]
+seg <- seg[nchar(seg)>1] 
+
+seg <- table(seg) 
+seg <- seg[!grepl('[0-9]+',names(seg))]
+length(seg) 
+
+seg <- sort(seg, decreasing = TRUE)[1:100] 
+
+```
+```{r}
+
+
+##install.packages("wordcloud2")
+library(wordcloud2)  
+
+wordcloud2(seg, size = 1,shape = 'star')  
+
+
+```
+
+
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
