@@ -40,3 +40,15 @@ When WeChat public accounts share information with readers, readers themselves m
 In my case, while I share STEM related learning resources with international students, international students often write articles about their studying-experiences. Using scraped data of these articles, the program in scraped_data.Rmd performs topic analysis(English topic analysis) to extract topics that are most concerned by international students(my target readers). This result also gives me inspirations in topic selection.
 
 Results and explanation are on my data project (link: https://karenzxy.wixsite.com/dpdp2)
+
+
+# Data Format
+own_reader_data.Rmd = 
+For the current code, the input csv file needs follow the format of the file in sample_input. These data can be downloaded and combined from the WeChat public account platform.
+*Need to record the current number of followers in order to calculate relative numbers.
+
+scraped_data_abstract_analysis.Rmd =
+For the current code, the input csv file needs to have a column named "abstract", which contains the scraped contents.
+
+scraped_data.Rmd = 
+For the current code, the input csv file needs to have a column named "text", which contains the scraped article contents.
