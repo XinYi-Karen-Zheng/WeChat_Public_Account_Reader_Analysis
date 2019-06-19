@@ -44,7 +44,7 @@ Results and explanation are on my data project (link: https://karenzxy.wixsite.c
 
 # Data Format
 own_reader_data.Rmd = 
-For the current code, the input csv file needs follow the format of the file in sample_input. These data can be downloaded and combined from the WeChat public account platform.
+For the current code, the input csv file needs follow the format of the file in sample_input. These data can be downloaded and combined from the WeChat public account platform. Article topics need to be physically labeled.
 *Need to record the current number of followers in order to calculate relative numbers.
 
 scraped_data_abstract_analysis.Rmd =
